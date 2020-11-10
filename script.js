@@ -1,7 +1,8 @@
 class ShoppingList {
   constructor(items = []) {
     this.state = { items };
-    this.isEventRoot = true;
+    this.isEventRoot = true; // todo: better way to identify the node to sync
+    // could set a property on the class instance after rendering
   }
   addItem = () => {
     const input = document.querySelector('#new-item');
@@ -24,13 +25,11 @@ class ShoppingList {
             type: 'li',
             name: 'Shopping Item',
             text: item,
-            // these close buttons don't work because it's re-rendering the li not the parent div
             children: [{
               type: 'button',
               name: 'Remove Shopping Item Button',
               text: 'X',
-              onClick: () => this.removeItem(item) // we need to somehow signal what the element to re-render is...
-              // each class/obj needs a reference to itself as a node that it could use?
+              onClick: () => this.removeItem(item)
             }]
           }))
         },
@@ -82,6 +81,29 @@ class Counter {
 const myCounter = new Counter(0);
 const myList = new ShoppingList(['milk', 'eggs', 'bread']);
 
+const article = {
+  type: 'div',
+  style: {
+    border: '1px solid black',
+    padding: '5px',
+    borderRadius: '2px',
+    margin: '5px',
+  },
+  children: [
+    {
+      type: 'p',
+      text: 'Check out Oakland',
+    },
+    {
+      type: 'img',
+      src: './oakland.jpg',
+      style: {
+        width: '100%',
+      }
+    }
+  ]
+};
+
 const myRootComponent = {
   type: 'div',
   children: [
@@ -100,8 +122,16 @@ const myRootComponent = {
     },
     myList,
     myCounter,
+    article,
   ]
+};
+
+function makeBigHeadline(text) {
+  return {
+    type: 'h1',
+    text,
+    className: 'centered bold',
+  };
 }
 
-let vDom;
 framework('root', myRootComponent);

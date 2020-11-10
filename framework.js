@@ -5,7 +5,7 @@
 
 var framework = (() => {
   const nodes = {};
-  const definedComponentProps = new Set(['type', 'text', 'children', 'frameworkId', 'id', 'onClick', 'name', 'style']);
+  const definedComponentProps = new Set(['type', 'text', 'children', 'frameworkId', 'id', 'onClick', 'name', 'style', 'className', 'src']);
   let devMode
 
   function sync(node, component) {
@@ -56,7 +56,7 @@ var framework = (() => {
     component.frameworkId = frameworkId;
     const componentObject = convertComponentToObject(component);
     if (devMode) ensureNoExtraneousProperties(componentObject, component);
-    const { type = 'div', text, onClick, children, id, value, onKeyUp, name, style, className } = componentObject
+    const { type = 'div', text, onClick, children, id, value, onKeyUp, name, style, className, src } = componentObject
     const node = document.createElement(type);
     if (text !== undefined) {
       node.innerText = text;
@@ -75,6 +75,9 @@ var framework = (() => {
     }
     if (className) {
       node.className = className;
+    }
+    if (src) {
+      node.src = src;
     }
     if (onClick) {
       node.addEventListener('click', (e) => handleEvent({ e, component, fn: onClick }));
